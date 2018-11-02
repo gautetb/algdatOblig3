@@ -1,4 +1,4 @@
-package no.oslomet.cs.algdat;
+
 
 /**
  * Created by lenovo on 11/1/2018.

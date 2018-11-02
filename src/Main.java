@@ -16,10 +16,11 @@ public class Main {
         char[] verdier = "IATBHJCRSOFELKGDMPQN".toCharArray();
         for(char c : verdier) tre2.leggInn(c);
 
-//        System.out.println(tre.omvendtString());
+        String[] s = tre2.grener();
 
-        System.out.println(tre.høyreGren());
-        System.out.println(tre2.høyreGren());
+        System.out.println(tre2.bladnodeverdier());
+
+
 
     }
 }

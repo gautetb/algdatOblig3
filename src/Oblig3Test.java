@@ -30,8 +30,8 @@ public class Oblig3Test
    // antallFeil += oppgave4();
    // antallFeil += oppgave5();
     antallFeil += oppgave6();
-   // antallFeil += oppgave7();
-   // antallFeil += oppgave8();
+    antallFeil += oppgave7();
+    antallFeil += oppgave8();
    // antallFeil += oppgave9();
    // antallFeil += oppgave10();
 
@@ -577,7 +577,7 @@ public class Oblig3Test
         }
 
         tre2.leggInn("F");
-        s = tre2.lengstGren();
+           s = tre2.lengstGren();
 
         if (!s.equals("[F]"))
         {
@@ -590,7 +590,9 @@ public class Oblig3Test
         String[] verdi = "HDGOCEKPJMIL".split("");
         for (String t : verdi) tre2.leggInn(t);
 
+
         s = tre2.lengstGren();
+
 
         if (!s.equals("[F, H, O, K, J, I]"))
         {

@@ -1,3 +1,4 @@
+import javax.print.DocFlavor;
 import java.util.*;
 
 public class ObligSBinTre<T> implements Beholder<T> {
@@ -181,7 +182,7 @@ public class ObligSBinTre<T> implements Beholder<T> {
     //Det  er  med  andre  ord  ikke  tilstrekkelig  å setterottilnullogantalltil 0.
     @Override
     public void nullstill() {
-        if (!tom()) nullstill(rot);
+      //  if (!tom()) nullstill(rot);
         rot = null;
         antall = 0;
         endringer++;
@@ -309,27 +310,148 @@ public class ObligSBinTre<T> implements Beholder<T> {
     }
 
     public String lengstGren() {
-        StringJoiner s = new StringJoiner(", ","[","]");
+        StringJoiner s = new StringJoiner(", ", "[", "]");
 
-        if (!tom()) {
-            Node<T> p = rot;
-            s.add(p.verdi.toString());
+        if (tom()) {
+            return "[]";
+        }
 
-            while(p.høyre != null || p.venstre != null) {
+        ArrayDeque<Node<T>> tempStack = new ArrayDeque<>();
+        ArrayDeque<Node<T>> finalStack = new ArrayDeque<>();
+        Node<T> p = førsteInorden(rot);
 
+        int i = 0;
+
+        int lengstvei = 0;
+
+        while (i < antall) {
+
+
+            if (p.venstre == null && p.høyre == null) {
+
+                Node<T> e = p;
+                tempStack.add(e);
+
+
+                int veilengde = 1;
+
+
+                while (e.forelder != null) {
+                    e = e.forelder;
+
+                    tempStack.push(e);
+
+                    veilengde++;
+                }
+
+                if (veilengde > lengstvei ) {
+                    lengstvei = veilengde;
+                    finalStack = tempStack.clone();
+                }
+
+                tempStack.clear();
             }
 
+            p = nesteInorden(p);
+            i++;
+        }
+
+        while (!finalStack.isEmpty()) {
+            s.add(finalStack.pop().toString());
         }
 
         return s.toString();
     }
 
+
     public String[] grener() {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        int bladnoder = 0;
+
+        if (tom()) {
+            return new String[]{};
+        }
+
+        ArrayDeque<Node<T>> stack = new ArrayDeque<>();
+        ArrayDeque<String> stringStack = new ArrayDeque<>();
+        Node<T> p = førsteInorden(rot);
+
+        int i = 0;
+
+        while (i < antall) {
+
+
+            if (p.venstre == null && p.høyre == null) {
+                StringJoiner s = new StringJoiner(", ", "[", "]");
+                Node<T> e = p;
+                stack.add(e);
+
+                bladnoder++;
+
+
+                while (e.forelder != null) {
+                    e = e.forelder;
+                    stack.push(e);
+                }
+
+                while (!stack.isEmpty()) {
+                    s.add(stack.pop().toString());
+                }
+
+
+                stringStack.push(s.toString());
+
+                stack.clear();
+            }
+
+            p = nesteInorden(p);
+            i++;
+        }
+
+        String[] liste = new String[bladnoder];
+        int e = bladnoder-1;
+
+        while (!stringStack.isEmpty()) {
+
+            liste[e] = stringStack.pop();
+
+            e--;
+        }
+
+        return liste;
+    }
+
+    public String blad(Node<T> p) {
+        if (p.venstre == null && p.høyre == null) {
+            return p.verdi.toString();
+        } else if (p.venstre != null && p.høyre != null) {
+            return blad(p.venstre) + ", "+blad(p.høyre);
+        } else if (p.venstre != null) {
+            return blad(p.venstre);
+        } else {
+            return blad(p.høyre);
+        }
     }
 
     public String bladnodeverdier() {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        StringJoiner s = new StringJoiner(",","[","]");
+
+        if (tom()) {
+            return "[]";
+        }
+
+        s.add(blad(rot));
+
+        return s.toString();
+    }
+
+    private static <T> Node<T> førstePostorden(Node<T> p) {
+
+        while (true) {
+            if (p.venstre != null) p = p.venstre;
+            else if (p.høyre != null) p = p.høyre;
+            else return p;
+        }
+
     }
 
     public String postString() {

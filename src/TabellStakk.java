@@ -1,5 +1,3 @@
-package no.oslomet.cs.algdat;
-
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
