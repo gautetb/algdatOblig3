@@ -178,9 +178,49 @@ public class ObligSBinTre<T> implements Beholder<T> {
         return s.toString();
     }
 
-    public String omvendtString() {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+   //Oppgave4
+    //Den skal gjøre som metodentoString(), men med verdiene i motsatt rekkefølge.
+    //Du skal løse dette ved å traversere treet i omvendt inorden  (dvs.  motsatt  vei  av  inorden) iterativt.
+    //erskaldu  bruke  en  hjelpestakk  (og  ikke rekursjon).
+    // F.eks. enTabellStakkeller en stakk fra java.util (f.eks. enArrayDeque).
+    //oden din skal ikke noe  sted  benytte  forelderpekerne.
+    //koden din også kunne virke  i  et  binærtreuten  forelderpekere.
+    public String omvendtString(){
+
+        //throw new UnsupportedOperationException("Ikke kodet ennå!");
+        if (tom()) return "[]";
+        Stakk<Node<T>> stakk = new TabellStakk<>();
+        StringJoiner s = new StringJoiner(", ", "[", "]");
+
+        Node<T> p = rot;
+        while (p.høyre != null)
+        {
+            stakk.leggInn(p);
+            p = p.høyre;
+        }
+
+        s.add(p.verdi.toString());
+
+        while (true)
+        {
+            if (p.venstre != null)
+            {
+                p = p.venstre;
+                while (p.høyre != null)
+                {
+                    stakk.leggInn(p);
+                    p = p.høyre;
+                }
+            }
+            else if (!stakk.tom()) p = stakk.taUt();
+            else break;
+
+            s.add(p.verdi.toString());
+        }
+
+        return s.toString();
     }
+
 
     public String høyreGren() {
         throw new UnsupportedOperationException("Ikke kodet ennå!");
