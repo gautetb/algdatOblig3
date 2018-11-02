@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
  * Created by lenovo on 11/1/2018.
  */
 
-//test
+
 public class TabellStakk<T> implements Stakk<T>
 {
     private T[] a;                     // en T-tabell
