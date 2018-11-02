@@ -82,13 +82,67 @@ public class ObligSBinTre<T> implements Beholder<T> {
         return false;
     }
 
+//oppgave 5.
+    //Der kan du kopiereProgramkode5.2 8 d), men i tillegg må du gjøre de endringene som trengs for at pekerenforelderfår korrekt verdi i  alle  noder  etter  en  fjerning.
     @Override
     public boolean fjern(T verdi) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        if (verdi == null) return false;
+
+        Node<T> p = rot, q = null;
+
+        while (p != null)
+        {
+            int cmp = comp.compare(verdi,p.verdi);
+            if (cmp < 0) { q = p; p = p.venstre; }
+            else if (cmp > 0) { q = p; p = p.høyre; }            else break;
+        }
+        if (p == null) return false;
+
+        if (p.venstre == null || p.høyre == null)
+        {
+            Node<T> b = p.venstre != null ? p.venstre : p.høyre;
+
+            if (b != null) b.forelder = q;
+
+            if (p == rot) rot = b;
+            else if (p == q.venstre) q.venstre = b;
+            else q.høyre = b;
+        }
+        else
+        {
+            Node<T> s = p, r = p.høyre;
+            while (r.venstre != null)
+            {
+                s = r;
+                r = r.venstre;
+            }
+
+            p.verdi = r.verdi;
+
+
+            if (r.høyre != null) r.høyre.forelder = s;
+
+            if (s != p) s.venstre = r.høyre;
+            else s.høyre = r.høyre;
+        }
+
+        antall--;
+        endringer++;
+        return true;
     }
 
-    public int fjernAlle(T verdi) {
-        throw new UnsupportedOperationException("Ikke kodetennå!");
+
+
+   //Den  skal fjerne  alle  forekomstene  avverdii  treet.
+    //Husk  at  duplikater  er  tillatt.
+    //ermed  kan  en  og samme verdi ligge flere steder i treet.
+    //Metoden skal returnere antallet som ble fjernet. Hvis treet  er  tomt,  skal  0  returneres.
+    public int fjernAlle(T verdi){
+        int antallFjernet = 0;
+        while (fjern(verdi)) antallFjernet++;
+        return antallFjernet;
+
+
     }
 
     @Override
@@ -122,9 +176,16 @@ public class ObligSBinTre<T> implements Beholder<T> {
         return antall == 0;
     }
 
+  //Den  skal traversere (rekursivt eller iterativt) treet i eneller annen rekkefølge og sørge for at samtlige pekere
+    // og  nodeverdier  i  treet  blir  nullet.
+    //Det  er  med  andre  ord  ikke  tilstrekkelig  å setterottilnullogantalltil 0.
     @Override
     public void nullstill() {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        if (!tom()) nullstill(rot);
+        rot = null;
+        antall = 0;
+        endringer++;
+
     }
 
     private static <T> Node<T> nesteInorden(Node<T> p) {
@@ -178,9 +239,49 @@ public class ObligSBinTre<T> implements Beholder<T> {
         return s.toString();
     }
 
-    public String omvendtString() {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+   //Oppgave4
+    //Den skal gjøre som metodentoString(), men med verdiene i motsatt rekkefølge.
+    //Du skal løse dette ved å traversere treet i omvendt inorden  (dvs.  motsatt  vei  av  inorden) iterativt.
+    //erskaldu  bruke  en  hjelpestakk  (og  ikke rekursjon).
+    // F.eks. enTabellStakkeller en stakk fra java.util (f.eks. enArrayDeque).
+    //oden din skal ikke noe  sted  benytte  forelderpekerne.
+    //koden din også kunne virke  i  et  binærtreuten  forelderpekere.
+    public String omvendtString(){
+
+        //throw new UnsupportedOperationException("Ikke kodet ennå!");
+        if (tom()) return "[]";
+        Stakk<Node<T>> stakk = new TabellStakk<>();
+        StringJoiner s = new StringJoiner(", ", "[", "]");
+
+        Node<T> p = rot;
+        while (p.høyre != null)
+        {
+            stakk.leggInn(p);
+            p = p.høyre;
+        }
+
+        s.add(p.verdi.toString());
+
+        while (true)
+        {
+            if (p.venstre != null)
+            {
+                p = p.venstre;
+                while (p.høyre != null)
+                {
+                    stakk.leggInn(p);
+                    p = p.høyre;
+                }
+            }
+            else if (!stakk.tom()) p = stakk.taUt();
+            else break;
+
+            s.add(p.verdi.toString());
+        }
+
+        return s.toString();
     }
+
 
     public String høyreGren() {
         StringJoiner s = new StringJoiner(", ","[","]");
