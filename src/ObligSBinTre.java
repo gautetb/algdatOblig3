@@ -176,9 +176,16 @@ public class ObligSBinTre<T> implements Beholder<T> {
         return antall == 0;
     }
 
+  //Den  skal traversere (rekursivt eller iterativt) treet i eneller annen rekkefølge og sørge for at samtlige pekere
+    // og  nodeverdier  i  treet  blir  nullet.
+    //Det  er  med  andre  ord  ikke  tilstrekkelig  å setterottilnullogantalltil 0.
     @Override
     public void nullstill() {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        if (!tom()) nullstill(rot);
+        rot = null;
+        antall = 0;
+        endringer++;
+
     }
 
     private static <T> Node<T> nesteInorden(Node<T> p) {
