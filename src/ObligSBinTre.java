@@ -133,8 +133,16 @@ public class ObligSBinTre<T> implements Beholder<T> {
 
 
 
-    public int fjernAlle(T verdi) {
-        throw new UnsupportedOperationException("Ikke kodetennå!");
+   //Den  skal fjerne  alle  forekomstene  avverdii  treet.
+    //Husk  at  duplikater  er  tillatt.
+    //ermed  kan  en  og samme verdi ligge flere steder i treet.
+    //Metoden skal returnere antallet som ble fjernet. Hvis treet  er  tomt,  skal  0  returneres.
+    public int fjernAlle(T verdi){
+        int antallFjernet = 0;
+        while (fjern(verdi)) antallFjernet++;
+        return antallFjernet;
+
+
     }
 
     @Override
